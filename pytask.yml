@@ -1,0 +1,28 @@
+apiVersion: kubeflow.org/v1
+kind: PyTorchJob
+metadata:
+  name: pytorch-dist-training
+spec:
+  pytorchReplicaSpecs:
+    Master:
+      replicas: 1
+      restartPolicy: OnFailure
+      template:
+        spec:
+          containers:
+          - name: pytorch
+            image: my-pytorch-image:latest
+            resources:
+              limits:
+                nvidia.com/gpu: 1
+    Worker:
+      replicas: 3
+      restartPolicy: OnFailure
+      template:
+        spec:
+          containers:
+          - name: pytorch
+            image: my-pytorch-image:latest
+            resources:
+              limits:
+                nvidia.com/gpu: 1
